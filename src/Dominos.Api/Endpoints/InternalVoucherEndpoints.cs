@@ -1,15 +1,21 @@
 using System.Text.Json;
 using Dominos.Persistence.Abstractions;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-namespace Dominos.Api.ApiHandlers;
+namespace Dominos.Api.Endpoints;
 
-public static class UploadVouchersApiHandler
+public static class InternalVoucherEndpoints
 {
     private record VoucherItem(Guid Id, string Name, decimal Price, string ProductCodes);
 
+    internal static void MapVoucherInternalEndpoints(this WebApplication app)
+    {
+        app.MapPost("api/internal/vouchers/upload", UploadVouchers).WithOpenApi();
+    }
+
     // injecting repository into endpoint is a bad practice.
     // here it is temporary solution because it is technical one-time endpoint
-    public static async Task<IResult> UploadVouchers(
+    private static async Task<Results<Ok, BadRequest<string>>> UploadVouchers(
         [FromServices] IVoucherUploadRepository repo,
         HttpContext context,
         IFormFile file,
@@ -19,7 +25,7 @@ public static class UploadVouchersApiHandler
         var vouchers = await JsonSerializer.DeserializeAsync<IReadOnlyCollection<VoucherItem>>(stream, (JsonSerializerOptions?)null, cancellation);
         if (vouchers is null)
         {
-            return Results.BadRequest("Could not deserialize file with voucher data");
+            return TypedResults.BadRequest("Could not deserialize file with voucher data");
         }
         var dals = vouchers.Select(x => new VoucherDal
         {
@@ -29,6 +35,6 @@ public static class UploadVouchersApiHandler
             ProductCodes = x.ProductCodes.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList(),
         }).ToList();
         await repo.InsertBatch(dals, cancellation);
-        return Results.Ok();
+        return TypedResults.Ok();
     }
 }

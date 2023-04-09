@@ -2,11 +2,11 @@ using AutoMapper;
 using Dominos.Api.Dtos;
 using Dominos.Domain;
 using Dominos.Persistence.Abstractions.Queries;
-namespace Dominos.Api.ApiHandlers;
+namespace Dominos.Api.Endpoints;
 
-public class VouchersApiHandlerMappings : Profile
+public class VoucherEndpointsMappings : Profile
 {
-    public VouchersApiHandlerMappings()
+    public VoucherEndpointsMappings()
     {
         CreateMap<Voucher, VoucherDto>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id.Id));

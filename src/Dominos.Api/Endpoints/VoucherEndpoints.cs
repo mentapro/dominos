@@ -6,11 +6,19 @@ using Dominos.Persistence.Abstractions.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-namespace Dominos.Api.ApiHandlers;
+namespace Dominos.Api.Endpoints;
 
-public static class VouchersApiHandler
+public static class VoucherEndpoints
 {
-    public static async Task<Ok<VoucherCollectionDto>> GetVouchers(
+    internal static void MapVoucherEndpoints(this WebApplication app)
+    {
+        app.MapGet("api/vouchers", GetVouchers).WithOpenApi();
+        app.MapGet("api/vouchers/{id:guid}", GetVoucher).WithOpenApi();
+        app.MapGet("api/vouchers/cheapest-by-product", GetCheapestVoucherByProductCode).WithOpenApi();
+        app.MapGet("api/vouchers/autocomplete", AutocompleteByName).WithOpenApi();
+    }
+
+    private static async Task<Ok<VoucherCollectionDto>> GetVouchers(
         [FromServices] IMediator mediator,
         [FromServices] IMapper mapper,
         [AsParameters] VouchersRequestDto dto,
@@ -21,7 +29,7 @@ public static class VouchersApiHandler
         return TypedResults.Ok(mapper.Map<VoucherCollectionDto>(response));
     }
 
-    public static async Task<Results<Ok<VoucherDto>, NotFound>> GetVoucher(
+    private static async Task<Results<Ok<VoucherDto>, NotFound>> GetVoucher(
         [FromServices] IVoucherRepository repository,
         [FromServices] IMapper mapper,
         [FromRoute] Guid id,
@@ -36,7 +44,7 @@ public static class VouchersApiHandler
         return TypedResults.Ok(mapper.Map<VoucherDto>(voucher));
     }
 
-    public static async Task<Results<Ok<VoucherDto>, NotFound>> GetCheapestVoucherByProductCode(
+    private static async Task<Results<Ok<VoucherDto>, NotFound>> GetCheapestVoucherByProductCode(
         [FromServices] IMediator mediator,
         [FromServices] IMapper mapper,
         [FromQuery(Name = "product_code")] string productCode,
@@ -51,7 +59,7 @@ public static class VouchersApiHandler
         return TypedResults.Ok(mapper.Map<VoucherDto>(voucher));
     }
 
-    public static async Task<Ok<VoucherCollectionDto>> AutocompleteByName(
+    private static async Task<Ok<VoucherCollectionDto>> AutocompleteByName(
         [FromServices] IMediator mediator,
         [FromServices] IMapper mapper,
         [AsParameters] VouchersAutocompleteRequestDto dto,

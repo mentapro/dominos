@@ -1,6 +1,6 @@
 using Dominos.Api;
-using Dominos.Api.ApiHandlers;
 using Dominos.Api.Configuration;
+using Dominos.Api.Endpoints;
 using Dominos.Persistence.Postgres;
 using MediatR;
 using Serilog;
@@ -34,11 +34,8 @@ try
         app.UseSwaggerUI();
     }
 
-    app.MapPost("/api/vouchers/upload", UploadVouchersApiHandler.UploadVouchers).WithOpenApi();
-    app.MapGet("api/vouchers", VouchersApiHandler.GetVouchers).WithOpenApi();
-    app.MapGet("api/vouchers/{id:guid}", VouchersApiHandler.GetVoucher).WithOpenApi();
-    app.MapGet("api/vouchers/cheapest-by-product", VouchersApiHandler.GetCheapestVoucherByProductCode).WithOpenApi();
-    app.MapGet("api/vouchers/autocomplete", VouchersApiHandler.AutocompleteByName).WithOpenApi();
+    app.MapVoucherEndpoints();
+    app.MapVoucherInternalEndpoints();
 
     await app.RunAsync();
 }
