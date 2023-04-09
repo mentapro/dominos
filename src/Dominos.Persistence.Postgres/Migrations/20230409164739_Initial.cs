@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -18,7 +19,7 @@ namespace Dominos.Persistence.Postgres.Migrations
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     name = table.Column<string>(type: "text", nullable: false),
                     price = table.Column<decimal>(type: "numeric", nullable: false),
-                    product_codes = table.Column<string[]>(type: "text[]", nullable: false)
+                    product_codes = table.Column<List<string>>(type: "text[]", nullable: false)
                 },
                 constraints: table =>
                 {
