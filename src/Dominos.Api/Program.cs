@@ -38,6 +38,7 @@ try
     app.MapGet("api/vouchers", VouchersApiHandler.GetVouchers).WithOpenApi();
     app.MapGet("api/vouchers/{id:guid}", VouchersApiHandler.GetVoucher).WithOpenApi();
     app.MapGet("api/vouchers/cheapest-by-product", VouchersApiHandler.GetCheapestVoucherByProductCode).WithOpenApi();
+    app.MapGet("api/vouchers/autocomplete", VouchersApiHandler.AutocompleteByName).WithOpenApi();
 
     await app.RunAsync();
 }

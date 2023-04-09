@@ -50,4 +50,15 @@ public static class VouchersApiHandler
         }
         return TypedResults.Ok(mapper.Map<VoucherDto>(voucher));
     }
+
+    public static async Task<Ok<VoucherCollectionDto>> AutocompleteByName(
+        [FromServices] IMediator mediator,
+        [FromServices] IMapper mapper,
+        [AsParameters] VouchersAutocompleteRequestDto dto,
+        CancellationToken cancellation)
+    {
+        var query = new VouchersAutocompleteQuery(dto.NameSearch, dto.Offset, dto.Limit);
+        var response = await mediator.Send(query, cancellation);
+        return TypedResults.Ok(mapper.Map<VoucherCollectionDto>(response));
+    }
 }
