@@ -28,5 +28,8 @@ public class VoucherConfiguration : IEntityTypeConfiguration<VoucherDal>
         builder.Property(n => n.ProductCodes)
                .HasColumnName("product_codes")
                .IsRequired();
+
+        builder.HasIndex(x => x.Name, "IX_vouchers_name");
+        builder.HasIndex(x => x.Name, "IX_vouchers_name_gin").HasMethod("gin").HasOperators("gin_trgm_ops");
     }
 }
