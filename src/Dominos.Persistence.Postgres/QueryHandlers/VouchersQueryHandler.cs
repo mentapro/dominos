@@ -26,6 +26,8 @@ public class VouchersQueryHandler : IRequestHandler<VouchersQuery, VouchersQuery
             query = query.Where(x => x.Name == request.Name);
         }
 
+        query = query.OrderBy(x => x.Id);
+
         var results = await query
                             .Skip(request.Offset)
                             .Take(request.Limit + 1)

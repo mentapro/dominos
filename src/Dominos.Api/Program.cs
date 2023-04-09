@@ -34,9 +34,10 @@ try
         app.UseSwaggerUI();
     }
 
-    app.MapPost("/api/vouchers/upload", UploadVouchersApiHandler.UploadVouchers);
-    app.MapGet("api/vouchers", VouchersApiHandler.GetVouchers);
-    app.MapGet("api/vouchers/{id:guid}", VouchersApiHandler.GetVoucher);
+    app.MapPost("/api/vouchers/upload", UploadVouchersApiHandler.UploadVouchers).WithOpenApi();
+    app.MapGet("api/vouchers", VouchersApiHandler.GetVouchers).WithOpenApi();
+    app.MapGet("api/vouchers/{id:guid}", VouchersApiHandler.GetVoucher).WithOpenApi();
+    app.MapGet("api/vouchers/cheapest-by-product", VouchersApiHandler.GetCheapestVoucherByProductCode).WithOpenApi();
 
     await app.RunAsync();
 }

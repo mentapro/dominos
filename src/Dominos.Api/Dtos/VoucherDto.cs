@@ -7,11 +7,11 @@ public sealed class VoucherDto
     public Guid Id { get; set; }
 
     [JsonPropertyName("name")]
-    public string Name { get; set; }
+    public string Name { get; set; } = null!;
 
     [JsonPropertyName("price")]
     public decimal Price { get; set; }
 
     [JsonPropertyName("product_codes")]
-    public IReadOnlyCollection<string> ProductCodes { get; set; }
+    public IReadOnlyCollection<string> ProductCodes { get; set; } = Array.Empty<string>();
 }

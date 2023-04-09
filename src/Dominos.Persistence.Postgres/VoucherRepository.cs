@@ -18,6 +18,6 @@ internal class VoucherRepository : IVoucherRepository
     public async Task<Voucher?> Get(VoucherId id, CancellationToken cancellation = default)
     {
         var voucherDal = await _context.Vouchers.FirstOrDefaultAsync(x => x.Id == id.Id, cancellation);
-        return voucherDal != null ? _mapper.Map<Voucher>(voucherDal) : null;
+        return voucherDal is not null ? _mapper.Map<Voucher>(voucherDal) : null;
     }
 }

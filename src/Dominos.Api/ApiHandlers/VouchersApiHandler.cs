@@ -4,23 +4,24 @@ using Dominos.Domain;
 using Dominos.Persistence.Abstractions;
 using Dominos.Persistence.Abstractions.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 namespace Dominos.Api.ApiHandlers;
 
 public static class VouchersApiHandler
 {
-    public static async Task<IResult> GetVouchers(
+    public static async Task<Ok<VoucherCollectionDto>> GetVouchers(
         [FromServices] IMediator mediator,
         [FromServices] IMapper mapper,
-        VouchersRequestDto dto,
+        [AsParameters] VouchersRequestDto dto,
         CancellationToken cancellation)
     {
         var query = new VouchersQuery(dto.Name, dto.Offset, dto.Limit);
         var response = await mediator.Send(query, cancellation);
-        return Results.Ok(mapper.Map<VoucherCollectionDto>(response));
+        return TypedResults.Ok(mapper.Map<VoucherCollectionDto>(response));
     }
 
-    public static async Task<IResult> GetVoucher(
+    public static async Task<Results<Ok<VoucherDto>, NotFound>> GetVoucher(
         [FromServices] IVoucherRepository repository,
         [FromServices] IMapper mapper,
         [FromRoute] Guid id,
@@ -28,6 +29,25 @@ public static class VouchersApiHandler
     {
         var voucherId = new VoucherId(id);
         var voucher = await repository.Get(voucherId, cancellation);
-        return Results.Ok(mapper.Map<VoucherDto>(voucher));
+        if (voucher is null)
+        {
+            return TypedResults.NotFound();
+        }
+        return TypedResults.Ok(mapper.Map<VoucherDto>(voucher));
+    }
+
+    public static async Task<Results<Ok<VoucherDto>, NotFound>> GetCheapestVoucherByProductCode(
+        [FromServices] IMediator mediator,
+        [FromServices] IMapper mapper,
+        [FromQuery(Name = "product_code")] string productCode,
+        CancellationToken cancellation)
+    {
+        var query = new CheapestVoucherByProductCodeQuery(productCode);
+        var voucher = await mediator.Send(query, cancellation);
+        if (voucher is null)
+        {
+            return TypedResults.NotFound();
+        }
+        return TypedResults.Ok(mapper.Map<VoucherDto>(voucher));
     }
 }

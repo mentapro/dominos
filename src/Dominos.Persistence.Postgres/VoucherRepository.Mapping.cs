@@ -13,6 +13,7 @@ public class VoucherRepositoryMapping : Profile
                     new VoucherId(dal.Id),
                     dal.Name,
                     dal.Price,
-                    dal.ProductCodes));
+                    dal.ProductCodes))
+                .IgnoreAllPropertiesWithAnInaccessibleSetter();
     }
 }
