@@ -1,6 +1,7 @@
+using Dominos.Domain;
 namespace Dominos.Persistence.Abstractions;
 
 public interface IVoucherRepository
 {
-    Task InsertBatch(IReadOnlyCollection<VoucherDal> vouchers, CancellationToken cancellation = default);
+    Task<Voucher?> Get(VoucherId id, CancellationToken cancellation = default);
 }

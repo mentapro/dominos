@@ -8,6 +8,6 @@ namespace Dominos.Persistence.Abstractions
 
         public decimal Price { get; set; }
 
-        public string[] ProductCodes { get; set; } = null!;
+        public List<string> ProductCodes { get; set; } = null!;
     }
 }

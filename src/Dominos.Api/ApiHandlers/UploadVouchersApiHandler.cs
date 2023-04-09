@@ -3,14 +3,14 @@ using Dominos.Persistence.Abstractions;
 using Microsoft.AspNetCore.Mvc;
 namespace Dominos.Api.ApiHandlers;
 
-public static class UploadVouchersHandler
+public static class UploadVouchersApiHandler
 {
     private record VoucherItem(Guid Id, string Name, decimal Price, string ProductCodes);
 
     // injecting repository into endpoint is a bad practice.
     // here it is temporary solution because it is technical one-time endpoint
     public static async Task<IResult> UploadVouchers(
-        [FromServices] IVoucherRepository repo,
+        [FromServices] IVoucherUploadRepository repo,
         HttpContext context,
         IFormFile file,
         CancellationToken cancellation)
@@ -26,7 +26,7 @@ public static class UploadVouchersHandler
             Id = x.Id,
             Name = x.Name,
             Price = x.Price,
-            ProductCodes = x.ProductCodes.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries),
+            ProductCodes = x.ProductCodes.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList(),
         }).ToList();
         await repo.InsertBatch(dals, cancellation);
         return Results.Ok();

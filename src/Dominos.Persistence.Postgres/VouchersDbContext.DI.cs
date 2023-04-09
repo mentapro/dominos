@@ -9,5 +9,6 @@ public static partial class DependencyInjection
         => services
            .AddHostedService<DbMigrationHostedService>()
            .AddTransient<IVoucherRepository, VoucherRepository>()
+           .AddTransient<IVoucherUploadRepository, VoucherUploadRepository>()
            .AddDbContext<VouchersDbContext>(opt => opt.UseNpgsql(postgresOptions.ConnectionString));
 }

@@ -2,6 +2,7 @@ using Dominos.Api;
 using Dominos.Api.ApiHandlers;
 using Dominos.Api.Configuration;
 using Dominos.Persistence.Postgres;
+using MediatR;
 using Serilog;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
 
@@ -15,6 +16,9 @@ try
 
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
+
+    builder.Services.AddAutoMapper(typeof(VouchersDbContext).Assembly, typeof(Program).Assembly);
+    builder.Services.AddMediatR(typeof(MediatrPersistence).Assembly);
 
     builder.Services.AddVouchersDatabase(settings.PostgresOptions);
 
@@ -30,7 +34,9 @@ try
         app.UseSwaggerUI();
     }
 
-    app.MapPost("/api/upload-vouchers", UploadVouchersHandler.UploadVouchers);
+    app.MapPost("/api/vouchers/upload", UploadVouchersApiHandler.UploadVouchers);
+    app.MapGet("api/vouchers", VouchersApiHandler.GetVouchers);
+    app.MapGet("api/vouchers/{id:guid}", VouchersApiHandler.GetVoucher);
 
     await app.RunAsync();
 }
