@@ -34,6 +34,6 @@ internal class VoucherConfiguration : IEntityTypeConfiguration<Voucher>
                .IsRequired();
 
         builder.HasIndex(x => x.Name, "IX_vouchers_name");
-        // builder.HasIndex(x => x.Name, "IX_vouchers_name_gin").HasMethod("gin").HasOperators("gin_trgm_ops");
+        builder.HasIndex(x => x.Name, "IX_vouchers_name_gin").HasMethod("gin").HasOperators("gin_trgm_ops");
     }
 }
