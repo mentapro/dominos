@@ -8,7 +8,7 @@ public static partial class DependencyInjection
     public static IServiceCollection AddVouchersDatabase(this IServiceCollection services, DbConnectionOptions postgresOptions)
         => services
            .AddHostedService<DbMigrationHostedService>()
-           .AddTransient<IVoucherRepository, VoucherRepository>()
-           .AddTransient<IVoucherUploadRepository, VoucherUploadRepository>()
+           .AddScoped<IVoucherRepository, VoucherRepository>()
+           .AddScoped<IVoucherUploadRepository, VoucherUploadRepository>()
            .AddDbContext<VouchersDbContext>(opt => opt.UseNpgsql(postgresOptions.ConnectionString));
 }
