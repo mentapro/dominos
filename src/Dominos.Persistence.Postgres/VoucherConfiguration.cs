@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Dominos.Persistence.Postgres;
 
-public class VoucherConfiguration : IEntityTypeConfiguration<Voucher>
+internal class VoucherConfiguration : IEntityTypeConfiguration<Voucher>
 {
     public void Configure(EntityTypeBuilder<Voucher> builder)
     {

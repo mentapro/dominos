@@ -33,5 +33,5 @@ public sealed class Voucher
     public decimal Price => _price;
 
     [JsonPropertyName("product_codes")]
-    public IReadOnlyCollection<string> ProductCodes => _productCodes;
+    public List<string> ProductCodes => _productCodes;
 }

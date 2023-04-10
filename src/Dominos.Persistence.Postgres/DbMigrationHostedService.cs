@@ -4,7 +4,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace Dominos.Persistence.Postgres;
 
-public class DbMigrationHostedService : IHostedService
+internal class DbMigrationHostedService : IHostedService
 {
     private readonly IServiceScopeFactory _scopeFactory;
 
