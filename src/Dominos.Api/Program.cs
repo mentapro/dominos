@@ -1,7 +1,6 @@
 using Dominos.Api;
 using Dominos.Api.Endpoints;
 using Dominos.Persistence.Postgres;
-using MediatR;
 using Serilog;
 using Serilog.Events;
 using Serilog.Formatting.Compact;
@@ -22,7 +21,7 @@ try
 
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
-    builder.Services.AddMediatR(typeof(MediatrPersistence).Assembly);
+    builder.Services.AddMediatR(conf => conf.RegisterServicesFromAssemblyContaining<MediatrPersistence>());
 
     builder.Services.AddVouchersDatabase(settings.PostgresOptions);
 
@@ -38,7 +37,9 @@ try
         app.UseSwaggerUI();
     }
 
-    app.MapVoucherEndpoints();
+    app.MapGroup("/api/vouchers")
+       .MapVoucherEndpoints()
+       .WithTags("Voucher Endpoints");
     app.MapVoucherInternalEndpoints();
 
     await app.RunAsync();
@@ -55,3 +56,7 @@ finally
 
 static void LogUnhandledExceptions(IHost host) => AppDomain.CurrentDomain.UnhandledException +=
         (sender, args) => host.Services.GetRequiredService<ILogger>().LogCritical((Exception)args.ExceptionObject, "Unhandled exception");
+
+public partial class Program
+{
+}

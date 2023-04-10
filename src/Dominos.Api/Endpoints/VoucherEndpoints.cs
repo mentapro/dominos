@@ -9,15 +9,16 @@ namespace Dominos.Api.Endpoints;
 
 public static class VoucherEndpoints
 {
-    internal static void MapVoucherEndpoints(this WebApplication app)
+    public static RouteGroupBuilder MapVoucherEndpoints(this RouteGroupBuilder group)
     {
-        app.MapGet("api/vouchers", GetVouchers).WithOpenApi();
-        app.MapGet("api/vouchers/{voucherId:guid}", GetVoucher).WithOpenApi();
-        app.MapGet("api/vouchers/cheapest-by-product", GetCheapestVoucherByProductCode).WithOpenApi();
-        app.MapGet("api/vouchers/autocomplete", AutocompleteByName).WithOpenApi();
+        group.MapGet("/", GetVouchers).WithOpenApi();
+        group.MapGet("/{voucherId:guid}", GetVoucher).WithOpenApi();
+        group.MapGet("/cheapest-by-product", GetCheapestVoucherByProductCode).WithOpenApi();
+        group.MapGet("/autocomplete", AutocompleteByName).WithOpenApi();
+        return group;
     }
 
-    private static async Task<Ok<VoucherCollectionDto>> GetVouchers(
+    public static async Task<Ok<VoucherCollectionDto>> GetVouchers(
         [FromServices] IMediator mediator,
         [AsParameters] VouchersRequestDto dto,
         CancellationToken cancellation)
@@ -31,7 +32,7 @@ public static class VoucherEndpoints
         });
     }
 
-    private static async Task<Results<Ok<Voucher>, NotFound>> GetVoucher(
+    public static async Task<Results<Ok<Voucher>, NotFound>> GetVoucher(
         [FromServices] IVoucherRepository repository,
         [FromRoute] Guid voucherId,
         CancellationToken cancellation)
@@ -44,7 +45,7 @@ public static class VoucherEndpoints
         return TypedResults.Ok(voucher);
     }
 
-    private static async Task<Results<Ok<Voucher>, NotFound>> GetCheapestVoucherByProductCode(
+    public static async Task<Results<Ok<Voucher>, NotFound>> GetCheapestVoucherByProductCode(
         [FromServices] IMediator mediator,
         [FromQuery(Name = "product_code")] string productCode,
         CancellationToken cancellation)
@@ -58,7 +59,7 @@ public static class VoucherEndpoints
         return TypedResults.Ok(voucher);
     }
 
-    private static async Task<Ok<VoucherCollectionDto>> AutocompleteByName(
+    public static async Task<Ok<VoucherCollectionDto>> AutocompleteByName(
         [FromServices] IMediator mediator,
         [AsParameters] VouchersAutocompleteRequestDto dto,
         CancellationToken cancellation)

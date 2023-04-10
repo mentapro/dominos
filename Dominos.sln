@@ -14,6 +14,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Domain", "Domain", "{652CB7
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application", "{B4029266-F00A-49C9-AB64-18C726B7C840}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dominos.PerformanceTests", "tests\Dominos.PerformanceTests\Dominos.PerformanceTests.csproj", "{C8D36039-0BD6-436B-B5A6-02C2F98FECFC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,6 +38,10 @@ Global
 		{43A3A10E-75FF-4EBE-9761-6163128B3FDC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43A3A10E-75FF-4EBE-9761-6163128B3FDC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{43A3A10E-75FF-4EBE-9761-6163128B3FDC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C8D36039-0BD6-436B-B5A6-02C2F98FECFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C8D36039-0BD6-436B-B5A6-02C2F98FECFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C8D36039-0BD6-436B-B5A6-02C2F98FECFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C8D36039-0BD6-436B-B5A6-02C2F98FECFC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{3A701998-D756-434F-B6BA-486C9646D0E0} = {F3711327-6914-44C7-BAC6-3A1B8A452293}
