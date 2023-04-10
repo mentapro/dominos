@@ -1,12 +1,18 @@
 using Dominos.Api;
-using Dominos.Api.Configuration;
 using Dominos.Api.Endpoints;
 using Dominos.Persistence.Postgres;
 using MediatR;
 using Serilog;
+using Serilog.Events;
+using Serilog.Formatting.Compact;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
 
-Log.Logger = new LoggerConfiguration().ConfigureBootstrapLogger().CreateBootstrapLogger();
+Log.Logger = new LoggerConfiguration()
+             .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+             .MinimumLevel.Override("System", LogEventLevel.Warning)
+             .Enrich.FromLogContext()
+             .WriteTo.Console(new RenderedCompactJsonFormatter())
+             .CreateBootstrapLogger();
 
 try
 {
@@ -16,8 +22,6 @@ try
 
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
-
-    builder.Services.AddAutoMapper(typeof(VouchersDbContext).Assembly, typeof(Program).Assembly);
     builder.Services.AddMediatR(typeof(MediatrPersistence).Assembly);
 
     builder.Services.AddVouchersDatabase(settings.PostgresOptions);

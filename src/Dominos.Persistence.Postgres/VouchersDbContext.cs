@@ -1,15 +1,14 @@
-using Dominos.Persistence.Abstractions;
+using Dominos.Domain;
 using Microsoft.EntityFrameworkCore;
 namespace Dominos.Persistence.Postgres;
 
 public class VouchersDbContext : DbContext
 {
-    public VouchersDbContext(DbContextOptions<VouchersDbContext> opts)
-            : base(opts)
+    public VouchersDbContext(DbContextOptions<VouchersDbContext> opts) : base(opts)
     {
     }
 
-    public DbSet<VoucherDal> Vouchers => Set<VoucherDal>();
+    public DbSet<Voucher> Vouchers => Set<Voucher>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

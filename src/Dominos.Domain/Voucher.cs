@@ -1,28 +1,37 @@
-﻿namespace Dominos.Domain;
-
-public sealed record VoucherId(Guid Id);
+﻿using System.Text.Json.Serialization;
+namespace Dominos.Domain;
 
 public sealed class Voucher
 {
-    public Voucher(VoucherId id, string name, decimal price, List<string> productCodes)
+    private readonly Guid _id;
+    private readonly string _name = null!;
+    private readonly decimal _price;
+    private readonly List<string> _productCodes = new List<string>();
+
+    private Voucher() { }
+
+    public Voucher(Guid id, string name, decimal price, IReadOnlyCollection<string> productCodes)
     {
-        Id = id ?? throw new ArgumentNullException(nameof(id));
-        Name = name ?? throw new ArgumentNullException(nameof(name));
-        Price = price;
-        ProductCodes = productCodes ?? throw new ArgumentNullException(nameof(productCodes));
+        _id = id;
+        _name = name ?? throw new ArgumentNullException(nameof(name));
+        _price = price;
+
+        if (productCodes is null)
+        {
+            throw new ArgumentNullException(nameof(productCodes));
+        }
+        _productCodes.AddRange(productCodes);
     }
 
-    public VoucherId Id { get; }
+    [JsonPropertyName("id")]
+    public Guid Id => _id;
 
-    public string Name { get; }
+    [JsonPropertyName("name")]
+    public string Name => _name;
 
-    public decimal Price { get; }
+    [JsonPropertyName("price")]
+    public decimal Price => _price;
 
-    public List<string> ProductCodes { get; }
-
-    public static Voucher New(VoucherId id, string name, decimal price, List<string> productCodes)
-    {
-        var voucher = new Voucher(id, name, price, productCodes);
-        return voucher;
-    }
+    [JsonPropertyName("product_codes")]
+    public IReadOnlyCollection<string> ProductCodes => _productCodes;
 }

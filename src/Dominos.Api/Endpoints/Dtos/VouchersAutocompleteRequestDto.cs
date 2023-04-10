@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-namespace Dominos.Api.Dtos;
+namespace Dominos.Api.Endpoints.Dtos;
 
 public class VouchersAutocompleteRequestDto
 {

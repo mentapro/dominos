@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Dominos.Persistence.Abstractions;
-
-namespace Dominos.Api.Configuration;
+namespace Dominos.Api;
 
 public class VoucherAppSettings
 {

@@ -1,5 +1,3 @@
-using AutoMapper;
-using Dominos.Domain;
 using Dominos.Persistence.Abstractions.Queries;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -8,13 +6,8 @@ namespace Dominos.Persistence.Postgres.QueryHandlers;
 public class VouchersAutocompleteQueryHandler : IRequestHandler<VouchersAutocompleteQuery, VouchersQueryResponse>
 {
     private readonly VouchersDbContext _context;
-    private readonly IMapper _mapper;
 
-    public VouchersAutocompleteQueryHandler(VouchersDbContext context, IMapper mapper)
-    {
-        _context = context;
-        _mapper = mapper;
-    }
+    public VouchersAutocompleteQueryHandler(VouchersDbContext context) => _context = context;
 
     public async Task<VouchersQueryResponse> Handle(VouchersAutocompleteQuery request, CancellationToken cancellation)
     {
@@ -27,7 +20,7 @@ public class VouchersAutocompleteQueryHandler : IRequestHandler<VouchersAutocomp
                                     .ToListAsync(cancellation);
 
         return new VouchersQueryResponse(
-            results.Take(request.Limit).Select(_mapper.Map<Voucher>).ToList(),
+            results.Take(request.Limit).ToList(),
             results.Count > request.Limit);
     }
 }

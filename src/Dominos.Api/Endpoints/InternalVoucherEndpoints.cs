@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Dominos.Domain;
 using Dominos.Persistence.Abstractions;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -27,13 +28,13 @@ public static class InternalVoucherEndpoints
         {
             return TypedResults.BadRequest("Could not deserialize file with voucher data");
         }
-        var dals = vouchers.Select(x => new VoucherDal
-        {
-            Id = x.Id,
-            Name = x.Name,
-            Price = x.Price,
-            ProductCodes = x.ProductCodes.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList(),
-        }).ToList();
+        var dals = vouchers
+                   .Select(x => new Voucher(
+                       x.Id,
+                       x.Name,
+                       x.Price,
+                       x.ProductCodes.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList()))
+                   .ToList();
         await repo.InsertBatch(dals, cancellation);
         return TypedResults.Ok();
     }

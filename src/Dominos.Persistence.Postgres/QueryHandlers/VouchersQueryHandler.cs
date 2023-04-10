@@ -1,5 +1,3 @@
-using AutoMapper;
-using Dominos.Domain;
 using Dominos.Persistence.Abstractions.Queries;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -9,13 +7,8 @@ namespace Dominos.Persistence.Postgres.QueryHandlers;
 public class VouchersQueryHandler : IRequestHandler<VouchersQuery, VouchersQueryResponse>
 {
     private readonly VouchersDbContext _context;
-    private readonly IMapper _mapper;
 
-    public VouchersQueryHandler(VouchersDbContext context, IMapper mapper)
-    {
-        _context = context;
-        _mapper = mapper;
-    }
+    public VouchersQueryHandler(VouchersDbContext context) => _context = context;
 
     public async Task<VouchersQueryResponse> Handle(VouchersQuery request, CancellationToken cancellation)
     {
@@ -34,7 +27,7 @@ public class VouchersQueryHandler : IRequestHandler<VouchersQuery, VouchersQuery
                             .ToListAsync(cancellation);
 
         return new VouchersQueryResponse(
-            results.Take(request.Limit).Select(_mapper.Map<Voucher>).ToList(),
+            results.Take(request.Limit).ToList(),
             results.Count > request.Limit);
     }
 }
