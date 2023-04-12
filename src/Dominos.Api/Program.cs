@@ -1,6 +1,8 @@
 using Dominos.Api;
 using Dominos.Api.Endpoints;
+using Dominos.Api.VouchersUploading;
 using Dominos.Persistence.Postgres;
+using FluentValidation;
 using Serilog;
 using Serilog.Events;
 using Serilog.Formatting.Compact;
@@ -21,9 +23,13 @@ try
 
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
-    builder.Services.AddMediatR(conf => conf.RegisterServicesFromAssemblyContaining<MediatrPersistence>());
+    builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+    builder.Services.AddMediatR(conf =>
+            conf.RegisterServicesFromAssemblyContaining<MediatrPersistence>()
+                .RegisterServicesFromAssemblyContaining<Program>());
 
     builder.Services.AddVouchersDatabase(settings.PostgresOptions);
+    builder.Services.AddDataInitialization();
 
     builder.Host.UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration));
 
@@ -37,9 +43,7 @@ try
         app.UseSwaggerUI();
     }
 
-    app.MapGroup("/api/vouchers")
-       .MapVoucherEndpoints()
-       .WithTags("Voucher Endpoints");
+    app.MapVoucherEndpoints();
     app.MapVoucherInternalEndpoints();
 
     await app.RunAsync();
