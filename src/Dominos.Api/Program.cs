@@ -37,11 +37,8 @@ try
 
     LogUnhandledExceptions(app);
 
-    if (app.Environment.IsDevelopment())
-    {
-        app.UseSwagger();
-        app.UseSwaggerUI();
-    }
+    app.UseSwagger();
+    app.UseSwaggerUI();
 
     app.MapVoucherEndpoints();
     app.MapVoucherInternalEndpoints();

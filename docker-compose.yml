@@ -1,6 +1,18 @@
 version: '3.8'
 
 services:
+  backend:
+    container_name: dominos
+    build:
+      context: ./src/
+    ports:
+      - "5004:80"
+    networks:
+      - dom-network
+    depends_on:
+      db:
+        condition: service_healthy
+
   db:
     image: postgres
     container_name: postgres
@@ -14,6 +26,16 @@ services:
       - 5432:5432
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - dom-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   pgdata:
+
+networks:
+  dom-network:
